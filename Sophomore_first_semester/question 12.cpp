@@ -181,11 +181,11 @@ int main() {
   std::string infix = "( -12 + 3 ) * 4 % 5";
   ExpressionTree exprTree(infix);
 
-  std::cout << "InFixOrder: ";
+  std::cout << "Inorder: ";
   exprTree.printInFixOrder();
-  std::cout << "PreFixOrder: ";
+  std::cout << "Preorder: ";
   exprTree.printPreFixOrder();
-  std::cout << "PostFixOrder: ";
+  std::cout << "Postorder: ";
   exprTree.printPostFixOrder();
   std::cout << "Evaluated result: " << exprTree.eval() << std::endl;
 
