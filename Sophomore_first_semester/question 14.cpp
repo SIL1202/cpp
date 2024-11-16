@@ -34,7 +34,7 @@ public:
     if (data.size() == 2)
       return data[1];
     return std::max(data[1], data[2]);
-  } // max-level越往下會越小
+  }
 
   // Delete the minimum element (at root) and maintain Min-Max Heap properties
   void deleteMin() {
@@ -67,7 +67,11 @@ private:
 
     int parentIndex = (index - 1) / 2;
 
-    // Determine if the current level is a min or max level
+    // Determine if the current level is a min or max min-level
+    // 1.查看是否在min-level
+    // 2.將值與parent比較
+    // 3.再將值與該層的grandparent比較
+    // 4.完成交換
     if (isMinLevel(index)) {
       if (data[index] > data[parentIndex]) {
         std::swap(data[index], data[parentIndex]);

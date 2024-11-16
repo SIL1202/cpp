@@ -176,8 +176,7 @@ private:
     throw std::invalid_argument("Invalid operator");
   }
 };
-
-int main() {
+- 12 3 + 4 * 5 % int main() {
   std::string infix = "( -12 + 3 ) * 4 % 5";
   ExpressionTree exprTree(infix);
 
