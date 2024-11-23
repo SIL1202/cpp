@@ -3,27 +3,26 @@
 
 using namespace std;
 
-class TrieNode {
+class Trie {
 private:
-  TrieNode *children[26];
+  Trie *children[26];
   bool endOfword;
-  int weight;
 
 public:
-  TrieNode() {
+  Trie() {
     for (int i = 0; i < 26; i++) {
       children[i] = nullptr;
     }
     endOfword = false;
   }
 
-  void Trie_insert(TrieNode *node, string word) {
-    TrieNode *root = this;
+  void Trie_insert(string word) {
+    Trie *root = this;
 
     for (int i = 0; i < word.length(); i++) {
       int index = word[i] - 'a';
       if (!root->children[index]) {
-        root->children[index] = new TrieNode();
+        root->children[index] = new Trie();
       }
       root = root->children[index];
     }
@@ -31,7 +30,7 @@ public:
   }
 
   bool startwith(string word) {
-    TrieNode *current = this;
+    Trie *current = this;
 
     for (int i = 0; i < word.length(); i++) {
       int index = word[i] - 'a';
@@ -44,7 +43,7 @@ public:
   }
 
   bool search(string word) {
-    TrieNode *current = this;
+    Trie *current = this;
 
     for (char c : word) {
       int index = c - 'a';
@@ -58,8 +57,8 @@ public:
 
 int main() {
   string a = "apple";
-  TrieNode *root = new TrieNode();
-  root->Trie_insert(root, a);
+  Trie *root = new Trie();
+  root->Trie_insert(a);
 
   cout << "startwith 'app': "
        << (root->startwith("app") ? "Found!" : "not Found!") << endl
