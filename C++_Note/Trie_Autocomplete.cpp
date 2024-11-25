@@ -73,5 +73,6 @@ int main() {
     cout << "- " << word << endl;
   }
 
+  delete root;
   return 0;
 }

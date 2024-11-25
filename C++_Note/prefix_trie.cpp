@@ -58,11 +58,18 @@ public:
 int main() {
   string a = "apple";
   Trie *root = new Trie();
+  // 這裡可以寫成
+  // Trie root;
+  // root.Trie_insert(a);
+  //
+  // 當需要建立多個Trie時，才需要使用物件指標
+
   root->Trie_insert(a);
 
   cout << "startwith 'app': "
        << (root->startwith("app") ? "Found!" : "not Found!") << endl
        << "search 'appl': " << (root->search("appl") ? "Found!" : "not Found!");
 
+  delete root; // 使用物件指標需要手動釋放記憶體
   return 0;
 }
