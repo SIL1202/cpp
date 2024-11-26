@@ -1,89 +1,92 @@
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
-using namespace std;
+// design your won SuffixTreeNode using in SuffixTree
+class SuffixTreeNode {
+public:
+  std::unordered_map<char, SuffixTreeNode *> children;
+  int count = 0;
+};
 
-class Trie {
+class SuffixTree {
 private:
-  Trie *children[26]; // 26個字母的子節點
-  bool endOfWord;     // 是否是單字結尾
+  SuffixTreeNode *root;
+  std::string text;
+
+  void deleteTrie(SuffixTreeNode *node) {
+    for (auto &child : node->children) {
+      deleteTrie(child.second);
+    }
+    delete node;
+  }
 
 public:
-  // 建構函數，初始化節點
-  Trie() {
-    for (int i = 0; i < 26; i++) {
-      children[i] = nullptr;
+  SuffixTree(const std::string &text) : text(text) {
+    root = new SuffixTreeNode();
+    for (int i = 0; i < text.length(); i++) {
+      buildSuffixTrie(text.substr(i));
     }
-    endOfWord = false;
   }
 
-  /*
-  搜尋字串是否存在於Trie中，若存在返回true，否則返回false。
-  */
-  bool search(string key) {
-    Trie *current = this; // 從根節點開始
-    for (char ch : key) {
-      int index = ch - 'a';
-      if (!current->children[index]) {
+  void buildSuffixTrie(const std::string &s) {
+    SuffixTreeNode *current = root;
+
+    for (char c : s) {
+      if (!current->children[c]) {
+        current->children[c] = new SuffixTreeNode();
+      }
+      current = current->children[c];
+      current->count++;
+    }
+  }
+
+  bool exist(const std::string &substring) {
+    SuffixTreeNode *current = root;
+    for (char c : substring) {
+      if (!current->children[c]) {
         return false;
       }
-      current = current->children[index];
+      current = current->children[c];
     }
-    return current->endOfWord; // 判斷是否為單字結尾
+    return true;
   }
 
-  /*
-  插入字串到Trie中。
-  */
-  void insert(string value) {
-    Trie *current = this; // 從根節點開始
-    for (char ch : value) {
-      int index = ch - 'a';
-      if (!current->children[index]) {
-        current->children[index] = new Trie();
+  int count(const std::string &substring) {
+    SuffixTreeNode *current = root;
+    for (auto &c : substring) {
+      if (!current->children[c]) {
+        return 0;
       }
-      current = current->children[index];
+      current = current->children[c];
     }
-    current->endOfWord = true; // 標記為單字結尾
+    return current->count;
   }
 
-  /*
-  前序遍歷Trie並輸出，每層用對應的空格縮排。
-  */
-  void preorder(int level = 0) {
-    for (int i = 0; i < 26; i++) {
-      if (children[i]) {
-        // 輸出當前字母（加上縮排）
-        cout << string(level * 2, ' ') << char(i + 'a');
-        // 遞迴輸出子節點
-        children[i]->preorder(level + 1);
-      }
-    }
-  }
+  ~SuffixTree() { deleteTrie(root); }
 };
 
 int main() {
-  Trie *trie = new Trie();
-  string command, key, value;
-
+  std::string text = "";
   while (true) {
-    cin >> command;
-    if (command == "insert") {
-      cin >> value;
-      trie->insert(value);
-    } else if (command == "search") {
-      cin >> key;
-      if (trie->search(key))
-        cout << "exist" << endl;
-      else
-        cout << "not exist" << endl;
-    } else if (command == "print") {
-      trie->preorder();
-    } else if (command == "exit") {
+    std::string temp;
+    getline(std::cin, temp);
+    if (temp == "")
       break;
-    }
+    text += temp;
   }
+  SuffixTree tree(text);
 
-  delete trie;
+  std::string query;
+  while (true) {
+    getline(std::cin, query);
+    if (query == "")
+      break;
+    std::cout << "Existence of '" << query
+              << "': " << (tree.exist(query) ? "Yes" : "No") << std::endl;
+    std::cout << "Count of '" << query << "': " << tree.count(query)
+              << std::endl;
+  }
   return 0;
 }
