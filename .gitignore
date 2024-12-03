@@ -1,0 +1,8 @@
+#MacOS
+
+.DS_Store
+
+#Compile file
+
+*.o
+
